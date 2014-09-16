@@ -1,0 +1,101 @@
+{{if wrap}}(function(window, angular, undefined) {{{/if}}'use strict';
+
+/**
+ * @ngdoc module
+ * @name {{moduleName}}
+ * @module
+ * @description
+ *
+ * The `{{moduleName}}` module provides services for interacting with
+ * the actions exposed by the Actionhero server via the web API.
+ */
+var module = angular.module({{moduleName|q}}, ['ngResource']);
+
+module
+  .constant('apiUrlBase', {{url|q}})
+  .config(['$httpProvider', function actionHeroServicesConfig($httpProvider) {
+    $httpProvider.interceptors.push('ActionheroAuthInterceptor');
+  }])
+  .factory('ActionheroAuthInterceptor', ['$q', 'ActionheroAuth',
+    function actionheroInterceptorFactory($q, ActionheroAuth) {
+      return {
+        'request': function actionheroRequestInterceptor(config) {
+          if (ActionheroAuth.token) {
+            config.headers.authorization = ActionheroAuth.token;
+          }
+          return config;
+        }
+      };
+    }
+  ])
+  .factory('actionheroRouteHelper', function actionheroRouteHelperFactory() {
+    /**
+     * Combines an argument values array and an argument names array into an arguments object.
+     *
+     * @param {Array} args
+     * @param {Array} argNames
+     * @return {Object}
+     */
+    function combineArgs(args, argNames) {
+      if (!argNames || !argNames.length) {
+        return {};
+      } else if (!args || !args.length) {
+        return {};
+      }
+
+      var name, combined = {};
+      for (var i = 0; i < args.length; i++) {
+        name = argNames[i];
+        combined[name] = args[i];
+      }
+      return combined;
+    }
+
+    /**
+     * Parses :variables in the given url using the args as values
+     * and argNames as the variable name.
+     *
+     * @param {string} url
+     * @param {Object} args
+     * @return {{openBrace}}{url: string, args: Object}{{closeBrace}}
+     */
+    function parseRoute(url, args) {
+      if (!args || typeof args !== 'object') {
+        return { url: url, args: {} };
+      }
+
+      var remainingArgs = {};
+
+      var name, reg, previous;
+      for (name in args) {
+        if (!args.hasOwnProperty(name)) {
+          continue;
+        }
+        previous = url;
+        reg      = new RegExp(':' + name, 'g');
+        url      = url.replace(reg, args[name]);
+        if (url === previous) {
+          remainingArgs[name] = args[name];
+        }
+      }
+      return {
+        url:  url,
+        args: remainingArgs
+      };
+    }
+    return {
+      combineArgs: combineArgs,
+      parseRoute:  parseRoute
+    }
+  })
+  .factory('ActionheroHttp', [ '$http', function actionheroHttpFactory($http) {
+    return function ActionheroHttp(config) {
+      return $http(config).then(function (response) {
+        return response.data;
+      });
+    };
+  }]);
+{{if single}}
+{{files}}{{output}}{{if #|last|falsy}}
+{{/if}}{{/files}}
+{{/if}}{{if wrap}}})(window, window.angular);{{/if}}

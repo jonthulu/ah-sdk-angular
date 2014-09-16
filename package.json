@@ -1,0 +1,13 @@
+{
+  "name": "ah-sdk-angular",
+  "description": "Tool for auto-generating Angular $resource services for Actionhero",
+  "version": "0.0.1",
+  "main": "./lib/generator",
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "dependencies": {
+    "lodash": "2.4.x",
+    "markup-js": "1.5.x"
+  }
+}

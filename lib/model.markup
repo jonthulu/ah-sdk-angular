@@ -1,0 +1,50 @@
+{{if single|falsy}}{{if wrap}}(function(window, angular, undefined) {{{/if}}'use strict';
+
+{{/if}}/**
+ * Generates the `{{name|capcase}}` object for the Actionhero SDK.
+ *
+ * @ngdoc object
+ * @name {{moduleName}}.{{name|capcase}}
+ * @object
+ * @description An $http object for the `{{name}}` model.
+ */
+{{if single}}module{{else}}angular.module({{moduleName|q}}){{/if}}
+  .factory({{name|capcase|q}}, ['ActionheroHttp', 'apiUrlBase', 'actionheroRouteHelper',
+    function (ActionheroHttp, apiUrlBase, actionheroRouteHelper) {
+      {{actions}}/**
+       * {{description}}
+       *{{inputs.required}}
+       * @param {*} {{.}} Required.{{/inputs.required}}{{inputs.optional}}
+       * @param {*=} {{.}} Optional.{{/inputs.optional}}
+       * @return {HttpPromise} A promise object with the standard then method.
+       *                       Use promise.data for the response body.
+       */
+      function {{sdkName}}({{params}}{{.}}{{if #|last|falsy}}, {{/if}}{{/params}}) {
+        var args;
+        if (arguments[0] && typeof arguments[0] === 'object') {
+          args = arguments[0];
+        } else {
+          args = actionheroRouteHelper.combineArgs(arguments, [{{if params}}
+            {{params}}{{.|q}}{{if #|last|falsy}},
+            {{/if}}{{/params}}
+          {{/if}}]);
+        }
+
+        var parsed = actionheroRouteHelper.parseRoute({{route|q}}, args);
+
+        return ActionheroHttp({
+          method: {{verb|q}},
+          url:    apiUrlBase + parsed.url,
+          {{if verb|equals>get}}params: parsed.args || null{{else}}data:   parsed.args || null{{/if}}
+        });
+      }{{if #|last|falsy}}
+
+      {{/if}}{{/actions}}
+
+      return {
+        {{actions}}  {{sdkName|q}}: {{sdkName}}{{if #|last|falsy}},
+        {{/if}}{{/actions}}
+      };
+    }
+  ]);{{if single|falsy}}{{if wrap}}
+})(window, window.angular);{{/if}}{{/if}}

@@ -1,0 +1,146 @@
+{{if single|falsy}}{{if wrap}}(function(window, angular, undefined) {{{/if}}'use strict';
+
+{{/if}}/**
+ * Authentication helper for the actionhero SDK.
+ *
+ * @ngdoc object
+ * @name {{moduleName}}.ActionheroAuth
+ * @object
+ * @description Generates the authentication helper.
+ */
+{{if single}}module{{else}}angular.module({{moduleName|q}}){{/if}}
+  .factory('ActionheroAuth', function actionheroAuthFactory() {
+    /**
+     * Authentication helper for the actionhero SDK.
+     *
+     * @constructor
+     */
+    function ActionheroAuth() {
+      this.prefix     = '$Actionhero:';
+      this.token      = loadFromStorage('token', this.prefix);
+      this.userId     = loadFromStorage('userId', this.prefix);
+      this.rememberMe = true;
+    }
+
+    /**
+     * Gets the logged in user id.
+     *
+     * @return {int|null}
+     */
+    ActionheroAuth.prototype.getUserId = function getUserId() {
+      return this.userId;
+    };
+
+    /**
+     * Returns whether or not a user is logged in.
+     *
+     * @return {boolean}
+     */
+    ActionheroAuth.prototype.isLoggedIn = function isLoggedIn() {
+      return (this.userId != null);
+    };
+
+    /**
+     * Stores the login info for the user in the browser storage.
+     *
+     * @param {string} token The access token for the user.
+     * @param {int} userId The id of the user.
+     * @param {boolean} rememberMe True to remember the user across browser sessions.
+     */
+    ActionheroAuth.prototype.login = function authLogin(token, userId, rememberMe) {
+      this.setUser(token, userId);
+      this.setRememberMe(rememberMe);
+      this.save();
+      return this;
+    };
+
+    /**
+     * Removes the login info for the user from the browser storage.
+     *
+     * @return {ActionheroAuth}
+     */
+    ActionheroAuth.prototype.logout = function authLogout() {
+      this.clearData();
+      this.save();
+      return this;
+    };
+
+    /**
+     * Sets whether or not to remember the user across browser sessions.
+     *
+     * @param {boolean} rememberMe
+     * @return {ActionheroAuth}
+     */
+    ActionheroAuth.prototype.setRememberMe = function authSetRememberMe(rememberMe) {
+      this.rememberMe = !!rememberMe;
+      return this;
+    };
+
+    /**
+     * Sets the user data without saving it to the browser storage.
+     * Use login() to save these changes.
+     *
+     * @param {string} token The access token for the user.
+     * @param {int} userId The id of the user.
+     * @return {ActionheroAuth}
+     */
+    ActionheroAuth.prototype.setUser = function authSetUser(token, userId) {
+      this.token  = token;
+      this.userId = userId;
+      return this;
+    };
+
+    /**
+     * Clears the user data without saving it to the browser storage.
+     * Use logout() to save these changes.
+     *
+     * @return {ActionheroAuth}
+     */
+    ActionheroAuth.prototype.clearData = function authClearData() {
+      this.token  = null;
+      this.userId = null;
+      return this;
+    };
+
+    /**
+     * Saves the currently defined data to the browser storage.
+     *
+     * @return {ActionheroAuth}
+     */
+    ActionheroAuth.prototype.save = function authSave() {
+      var storage = sessionStorage;
+      if (this.rememberMe) {
+        storage = localStorage;
+      }
+
+      storage[this.prefix + 'token']  = (this.token !== null)  ? this.token  : '';
+      storage[this.prefix + 'userId'] = (this.userId !== null) ? this.userId : '';
+      return this;
+    };
+
+    /**
+     * Loads the user data from the browser storage into this auth helper.
+     *
+     * @return {ActionheroAuth}
+     */
+    ActionheroAuth.prototype.load = function authLoad() {
+      this.token  = loadFromStorage('token', this.prefix);
+      this.userId = loadFromStorage('userId', this.prefix);
+      return this;
+    };
+
+    /**
+     * Loads user data from the browser storage.
+     *
+     * @param {string} name The name of the data.
+     * @param {string} prefix The key prefix.
+     * @return {*}
+     */
+    function loadFromStorage(name, prefix) {
+      var key = prefix + name;
+      return localStorage[key] || sessionStorage[key] || null;
+    }
+
+    return new ActionheroAuth();
+  });{{if single|falsy}}{{if wrap}}
+})(window, window.angular);{{/if}}{{/if}}
