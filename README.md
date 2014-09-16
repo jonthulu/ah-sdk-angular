@@ -131,12 +131,12 @@ Auth.login(email, password).then(function (data) {}, function (err) {});
 
 ## Using the generated services
 
-1. Add the ahServices.js file (and any other generated files) to your Angular App.
+* Add the ahServices.js file (and any other generated files) to your Angular App.
 ```html
 <script src="scripts/ahServices.js"></script>
 (other generated files here)
 ```
-2. Add ahServices as a dependency of your module.
+* Add ahServices as a dependency of your module.
 ```js
 angular.module('myApp', [
   ...
@@ -144,7 +144,7 @@ angular.module('myApp', [
 ]);
 ```
 
-3. Simply inject your new models into anywhere you need them.
+* Simply inject your new models into anywhere you need them.
 ```js
 angular.module('myApp').controller('authController', ['Auth', 'ActionheroAuth', function (Auth, ActionheroAuth) {
   $scope.login = function () {
@@ -158,7 +158,7 @@ angular.module('myApp').controller('authController', ['Auth', 'ActionheroAuth', 
 }]);
 ```
 
-4. Use the ActionheroAuth service to track Authentication. When provided an access token and user id, all subsequent
+* Use the ActionheroAuth service to track Authentication. When provided an access token and user id, all subsequent
 $http calls will have the Authentication header automatically set to your user access token.
 ```
 angular.module('myApp').controller('testController', ['ActionheroAuth', 'Users', function (ActionheroAuth, Users) { 
@@ -181,11 +181,11 @@ Note: You will have to generate your own accessTokens, I use the uid2 package av
 npm install uid2 --save
 ```
 
-5. When you logout the user, call ActionheroAuth.logout() to clear the current session.
+* When you logout the user, call ActionheroAuth.logout() to clear the current session.
 ```js
 Auth.logout(function logoutSuccess() {
   ActionheroAuth.logout();
 });
 ```
 
-6. Check the docblocks in the generated code for more help if you need it.
+* Check the docblocks in the generated code for more help if you need it.
