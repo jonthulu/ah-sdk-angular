@@ -7,9 +7,9 @@ The services are generated based entirely on the actionhero routing. (See Genera
 ## Getting Started
 The included grunt task requires Grunt `~0.4.2`
 
-!! It is required to update your settings under config.servers.web.httpHeaders['Access-Control-Allow-Headers']
+### Important!
+It is required to update your settings under config.servers.web.httpHeaders['Access-Control-Allow-Headers']
 to include `Authorization`:
-
 ```js
   {
     ...
@@ -17,6 +17,11 @@ to include `Authorization`:
   }
 ```
 
+It is recommended that you set simpleRouting to false in your
+actionhero/config/servers/web.js config file to avoid superfluous
+model generation.
+
+### Install
 If you haven't used [Grunt](http://gruntjs.com/) before,
 be sure to check out the [Getting Started](http://gruntjs.com/getting-started)
 guide, as it explains how to create
@@ -36,15 +41,10 @@ grunt.loadNpmTasks('ah-sdk-angular');
 grunt.config('actionheroSDKAngular', {
   options: {
     output: 'DIRECTORY TO OUTPUT FILES'
+    // Add extra options here.
   }
 });
 ```
-
-!!!
-It is recommended that you set simpleRouting to false in your
-actionhero/config/servers/web.js config file to avoid superfluous
-model generation.
-!!!
 
 ## Tasks and configuration
 
@@ -57,41 +57,47 @@ grunt actionheroSDKAngular
 Options available when generating the services file(s).
 
 ### output
-Type: `String` *Required
+Type: `string` *Required
 
 The path to the directory in which generate the file(s).
 If serviceOutput is set, only the Angular module file will go here.
 
 ### serviceOutput
-Type: `String|Null` *Optional
+Type: `string|null` *Optional
+Default: `null`
 
 The path to the directory in which to generate the Angular service/factory files.
 Skipped if singleFile is true.
-Defaults to null.
 
 ### version
 Type: `String` *Optional
+Default: `'latest'`
 
 The action version to use (can be either 'latest' or a number like 1.0 or 2.3).
 If the given version cannot be found, the latest version is used.
-Defaults to 'latest'.
 
 ### singleFile
 Type: `Boolean` *Optional
+Default: `false`
 
 If true, will generate a single file instead of one for each model.
-Defaults to false.
 
 ### wrap
 Type: `Boolean` *Optional
+Default: `false`
 
 If true, each file will be wrapped in a javascript function wrapper.
-Defaults to false.
+```js
+(function(window, angular, undefined) {
+  // GENERATED CODE HERE
+})(window, window.angular);
+```
 
 ### moduleName
 Type: `String` *Optional
+Default: `'ahServices'`
 
-The name of the angular module (defaults to ahServices).
+The name of the generated angular module.
 
 ### Sending options to Grunt
 Options format when calling grunt is `:output:version:singleFile:wrap`.
