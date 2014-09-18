@@ -8,7 +8,7 @@ The services are generated based entirely on the actionhero routing. (See Genera
 The included grunt task requires Grunt `~0.4.2`
 
 ### Important!
-It is required to update your settings under config.servers.web.httpHeaders['Access-Control-Allow-Headers']
+It is required to update your settings under `config.servers.web.httpHeaders['Access-Control-Allow-Headers']`
 to include `Authorization`:
 ```js
   {
@@ -17,9 +17,16 @@ to include `Authorization`:
   }
 ```
 
-It is recommended that you set simpleRouting to false in your
-actionhero/config/servers/web.js config file to avoid superfluous
+It is recommended that you set `config.servers.web.simpleRouting` to `false` to avoid superfluous
 model generation.
+```js
+  {
+    ...
+    'simpleRouting': false,
+  }
+```
+
+Both of these settings can be found in your actionhero/config/servers/web.js config file.
 
 ### Install
 If you haven't used [Grunt](http://gruntjs.com/) before,
