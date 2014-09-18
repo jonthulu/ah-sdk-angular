@@ -53,14 +53,47 @@ To run the grunt task
 grunt actionheroSDKAngular
 ```
 
-OPTIONS
-* output: (Required) The path to the directory in which generate the file(s). If serviceOutput is set, only the Angular module file will go here.
-* serviceOutput: (Optional) The path to the directory in which to generate the Angular service/factory files. Skipped if singleFile is true.
-* version: (Optional) The action version to use (can be either 'latest' or a number like 1.0 or 2.3). If the given version cannot be found, the latest version is used.
-* singleFile: (Optional) If true, will generate a single file instead of one for each model.
-* wrap: (Optional) If true, each file will be wrapped in a javascript function wrapper. Defaults to false.
-* moduleName: (Optional) The name of the angular module (defaults to ahServices).
+### Options
+Options available when generating the services file(s).
 
+### output
+Type: `String` *Required
+
+The path to the directory in which generate the file(s).
+If serviceOutput is set, only the Angular module file will go here.
+
+### serviceOutput
+Type: `String|Null` *Optional
+
+The path to the directory in which to generate the Angular service/factory files.
+Skipped if singleFile is true.
+Defaults to null.
+
+### version
+Type: `String` *Optional
+
+The action version to use (can be either 'latest' or a number like 1.0 or 2.3).
+If the given version cannot be found, the latest version is used.
+Defaults to 'latest'.
+
+### singleFile
+Type: `Boolean` *Optional
+
+If true, will generate a single file instead of one for each model.
+Defaults to false.
+
+### wrap
+Type: `Boolean` *Optional
+
+If true, each file will be wrapped in a javascript function wrapper.
+Defaults to false.
+
+### moduleName
+Type: `String` *Optional
+
+The name of the angular module (defaults to ahServices).
+
+### Sending options to Grunt
 Options format when calling grunt is `:output:version:singleFile:wrap`.
 ```shell
 grunt actionheroSDKAngular:/tmp:1.0:true:true
@@ -70,8 +103,9 @@ Note: These will override the options defined in the grunt config.
 ## Generation Details
 
 The tool scans the routes file and uses the paths to define models.
-These models are defined using the first directory from the URL path name for each route.
-The actions/methods defined for each model is taken from the second directory from the path or a defined sdkName.
+These models are defined using the first directory from the URL `path` param or a defined `sdkModel` param for each route.
+The actions/methods defined for each model is taken from the second directory from the `path` param or a defined `sdkName` param.
+You can also provide an optional `sdkRoute` param that mimics the `path` param but will be used instead of `path` (`sdkName` and `sdkModel` will still override this.)
 
 Example config/routes.js file:
 ```js
@@ -85,7 +119,7 @@ Example config/routes.js file:
   ],
   post: [
     // Auth Routes
-    { path: '/auth/login', action: 'authLogin', sdkName: 'login' },
+    { path: '/auth/login', action: 'authLogin', sdkName: 'login', sdkModel: 'auth' },
 
     // User Routes
     { path: '/users', action: 'userCreate', sdkName: 'create' }
