@@ -13,14 +13,15 @@
     function (ActionheroHttp, apiUrlBase, actionheroRouteHelper) {
       {{actions}}/**
        * {{description}}
-       *{{inputs.required}}
-       * @param {*} {{.}} Required.{{/inputs.required}}{{inputs.optional}}
-       * @param {*=} {{.}} Optional.{{/inputs.optional}}
+       *{{if sdkSingleParam|falsy}}{{inputs.required}}
+       * @param {string|number} {{.}} Required.{{/inputs.required}}{{inputs.optional}}
+       * @param {string|number=} {{.}} Optional.{{/inputs.optional}}{{else}}
+       * @param {{doubleOpenBrace}}{{inputs.required}}{{.}}:*,{{/inputs.required}}{{inputs.optional}}{{.}}:*,{{/inputs.optional}}{{doubleCloseBrace}} args{{/if}}
        * @return {HttpPromise} A promise object with the standard then method.
        *                       Use promise.data for the response body.
        */
-      function {{sdkName}}({{params}}{{.}}{{if #|last|falsy}}, {{/if}}{{/params}}) {
-        var args;
+      function {{sdkName}}({{if sdkSingleParam}}args{{else}}{{params}}{{.}}{{if #|last|falsy}}, {{/if}}{{/params}}{{/if}}) {
+        {{if sdkSingleParam|falsy}}var args;
         if (arguments[0] && typeof arguments[0] === 'object') {
           args = arguments[0];
         } else {
@@ -30,7 +31,7 @@
           {{/if}}]);
         }
 
-        var parsed = actionheroRouteHelper.parseRoute({{route|q}}, args);
+        {{/if}}var parsed = actionheroRouteHelper.parseRoute({{route|q}}, args || {});
 
         return ActionheroHttp({
           method: {{verb|q}},

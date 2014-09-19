@@ -57,7 +57,7 @@ module
      *
      * @param {string} url
      * @param {Object} args
-     * @return {{openBrace}}{url: string, args: Object}{{closeBrace}}
+     * @return {{doubleOpenBrace}}url: string, args: Object{{doubleCloseBrace}}
      */
     function parseRoute(url, args) {
       if (!args || typeof args !== 'object') {

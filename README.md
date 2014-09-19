@@ -63,33 +63,33 @@ grunt actionheroSDKAngular
 ### Options
 Options available when generating the services file(s).
 
-### output
+#### output
 Type: `string` *Required
 
 The path to the directory in which generate the file(s).
 If serviceOutput is set, only the Angular module file will go here.
 
-### serviceOutput
+#### serviceOutput
 Type: `string|null` *Optional
 Default: `null`
 
 The path to the directory in which to generate the Angular service/factory files.
 Skipped if singleFile is true.
 
-### version
+#### version
 Type: `String` *Optional
 Default: `'latest'`
 
 The action version to use (can be either 'latest' or a number like 1.0 or 2.3).
 If the given version cannot be found, the latest version is used.
 
-### singleFile
+#### singleFile
 Type: `Boolean` *Optional
 Default: `false`
 
 If true, will generate a single file instead of one for each model.
 
-### wrap
+#### wrap
 Type: `Boolean` *Optional
 Default: `false`
 
@@ -100,7 +100,45 @@ If true, each file will be wrapped in a javascript function wrapper.
 })(window, window.angular);
 ```
 
-### moduleName
+#### filter.whitelist
+Type: `Array.<string>` *Optional
+Default: []
+
+A list of keywords that must be defined in the `sdkKeywords` option of the actionTemplate in order
+for this action to be generated as a method in the model service.
+The blacklist takes precedent over the whitelist.
+```js
+  filter: {
+    whitelist: ['admin']
+  }
+
+  // Will generate this action.
+  sdkKeywords: ['admin', 'expensive']
+
+  // Will not generate this action.
+  sdkKeywords: ['client']
+```
+
+#### filter.blacklist
+Type: `Array.<string>` *Optional
+Default: []
+
+A list of keywords that CAN NOT be defined in the `sdkKeywords` option of the actionTemplate in order
+for this action to be generated as a method in the model service.
+The blacklist takes precedent over the whitelist.
+```js
+  filter: {
+    blacklist: ['admin']
+  }
+
+  // Will generate this action.
+  sdkKeywords: ['client', 'expensive']
+
+  // Will not generate this action.
+  sdkKeywords: ['client', 'admin']
+```
+
+#### moduleName
 Type: `String` *Optional
 Default: `'ahServices'`
 
@@ -166,15 +204,69 @@ function login(email, password, ttl) {
 ```
 
 These parameters can be given to the method as individual arguments or by sending an object as the first argument.
+If the actionTemplate has the `sdkSingleParam` option set to true, then only the second example will be available.
 ```js
 Auth.login(email, password);
 Auth.login({'email': email, 'password': password);
 ```
 
-Each function does a $http call and returns a simple promise with the returned data (the normal header and other info is stripped).
+Each function does a $http call and returns a simple `promise` with the returned data (the normal header and other info is stripped).
 ```js
 Auth.login(email, password).then(function (data) {}, function (err) {});
 ```
+
+### Routes config options
+
+These are options that can be set in the route definitions in your actionhero routes config file (actionhero/config/routes.js).
+
+#### sdkModel
+Type: `string` *Optional
+Default: Parsed from the `path` or `sdkPath` param (/sdkModel/sdkName/other/routing/:id).
+
+The model name to use when generating a service for this route.
+```js
+{ path: '/anything/login', action: 'authLogin', sdkName: 'login', sdkModel: 'auth' }
+// Generates an Auth model.
+```
+
+#### sdkName
+Type: `string` *Optional
+Default: Parsed from the `path` or `sdkPath` param (/sdkModel/sdkName/other/routing/:id).
+
+The name to use when generating a method for this route.
+```js
+{ path: '/auth/anything/:id', action: 'authLogin', sdkName: 'login', sdkModel: 'auth' }
+// Generates an Auth.login method.
+```
+
+#### sdkPath
+Type: `string` *Optional
+Default: null
+
+Overrides the `path` param when parsing the model and action names.
+The `sdkModel` and `sdkName` options override anything parsed from this option.
+```js
+{ path: '/something/anything/:id', action: 'authLogin', sdkRoute: '/auth/login' }
+// Generates an Auth.login method.
+```
+
+### ActionTemplate options
+
+These are options that can be set in the action template when you are defining your actionhero actions.
+
+#### sdkKeywords
+Type: `{Array.<string>}` *Optional
+Default: null
+
+A list of keywords that can help define the action. These can be used to filter types of actions
+when generating the services.
+
+#### sdkSingleParam
+Type: `boolean` *Optional
+Default: false
+
+If true, the `inputs.required` and `inputs.optional` params will not be listed out as arguments of the method.
+Instead, only a single param will be available that accepts the key/value object of params.
 
 ## Using the generated services
 
