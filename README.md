@@ -102,7 +102,7 @@ If true, each file will be wrapped in a javascript function wrapper.
 
 #### filter.whitelist
 Type: `Array.<string>` *Optional  
-Default: []
+Default: `[]`
 
 A list of keywords that must be defined in the `sdkKeywords` option of the actionTemplate in order
 for this action to be generated as a method in the model service.
@@ -121,7 +121,7 @@ The blacklist takes precedent over the whitelist.
 
 #### filter.blacklist
 Type: `Array.<string>` *Optional  
-Default: []
+Default: `[]`
 
 A list of keywords that CAN NOT be defined in the `sdkKeywords` option of the actionTemplate in order
 for this action to be generated as a method in the model service.
