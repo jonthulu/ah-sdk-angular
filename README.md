@@ -241,7 +241,7 @@ The name to use when generating a method for this route.
 
 #### sdkPath
 Type: `string` *Optional  
-Default: null
+Default: `null`
 
 Overrides the `path` param when parsing the model and action names.
 The `sdkModel` and `sdkName` options override anything parsed from this option.
@@ -256,14 +256,14 @@ These are options that can be set in the action template when you are defining y
 
 #### sdkKeywords
 Type: `{Array.<string>}` *Optional  
-Default: null
+Default: `null`
 
 A list of keywords that can help define the action. These can be used to filter types of actions
 when generating the services.
 
 #### sdkSingleParam
 Type: `boolean` *Optional  
-Default: false
+Default: `false`
 
 If true, the `inputs.required` and `inputs.optional` params will not be listed out as arguments of the method.
 Instead, only a single param will be available that accepts the key/value object of params.
