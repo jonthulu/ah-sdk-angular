@@ -18,7 +18,7 @@ to include `Authorization`:
 ```
 
 It is recommended that you set `config.servers.web.simpleRouting` to `false` to avoid superfluous
-model generation.
+route generation. It is not necessary though since methods are only generated from the routes config file.
 ```js
   {
     ...
@@ -182,8 +182,9 @@ The Auth model will contain a login and logout method.
 The User model will contain a create and getPrivateData method.
 
 Note that the http verbs are preserved in the $http calls, so Auth.login will do a POST call and Auth.logout will do a GET call.
+Any routes under the `all` verb will be ignored when generating the sdk.
 
-(Note: If no sdkName is given and no second folder exists, such as with the userCreate action above,
+(Note: If no `sdkName` is given and no second folder exists, such as with the userCreate action above,
 then a name will be generated based on the verb. Get=>find, post=>create, put=>update, delete=>delete, patch=>patch.)
 
 The parameters for the generated methods will come from the actionhero action file's inputs.required and inputs.optional settings.
@@ -213,6 +214,16 @@ Auth.login({'email': email, 'password': password);
 Each function does a $http call and returns a simple `promise` with the returned data (the normal header and other info is stripped).
 ```js
 Auth.login(email, password).then(function (data) {}, function (err) {});
+```
+
+A bonus method `getUrls` is generated for each model that returns an object with the url for each
+action. Be aware of any :params in each url that may need to be replaced. You can use `actionheroRouteHelper.parseRoute`
+to fill in these params if you like.
+```js
+angular.module('myApp').controller('userController', ['Users', 'actionheroRouteHelper', function (Users, actionheroRouteHelper) {
+  var url = Users.getUrls().getPrivateData;            // Returns '/users/getPrivateData/:id'.
+  actionheroRouteHelper.parseRoute(url, {id: 32}).url; // Returns '/users/getPrivateData/32'.
+}
 ```
 
 ### Routes config options
@@ -248,6 +259,19 @@ The `sdkModel` and `sdkName` options override anything parsed from this option.
 ```js
 { path: '/something/anything/:id', action: 'authLogin', sdkRoute: '/auth/login' }
 // Generates an Auth.login method.
+```
+
+#### sdkKeywords
+Type: `Array.<string>` *Optional  
+Default: `null`
+
+Adds a keyword to this specific route instead of the action. This can be used to filter routes to
+an action based on the routing parameters.
+```js
+{ path: '/something/anything', action: 'createSomething' }
+{ path: '/something/anything/:adminParam', action: 'createSomething', sdkKeywords: ['admin'] }
+// Here is an example where the admin sdk will take a param for an action but the non-admin wont
+// for the same action.
 ```
 
 ### ActionTemplate options

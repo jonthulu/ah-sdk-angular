@@ -16,8 +16,8 @@ module
   .config(['$httpProvider', function actionHeroServicesConfig($httpProvider) {
     $httpProvider.interceptors.push('ActionheroAuthInterceptor');
   }])
-  .factory('ActionheroAuthInterceptor', ['$q', 'ActionheroAuth',
-    function actionheroInterceptorFactory($q, ActionheroAuth) {
+  .factory('ActionheroAuthInterceptor', ['ActionheroAuth',
+    function actionheroInterceptorFactory(ActionheroAuth) {
       return {
         'request': function actionheroRequestInterceptor(config) {
           if (ActionheroAuth.token) {

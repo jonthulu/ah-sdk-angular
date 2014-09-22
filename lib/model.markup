@@ -42,8 +42,20 @@
 
       {{/if}}{{/actions}}
 
+      /**
+       * Gets the urls for each method.
+       *
+       * @return {Object} Object with keys as method names and values as the urls.
+       */
+      function getUrls() {
+        return {{openBrace}}{{actions}}
+          {{sdkName}}: {{route|q}}{{if #|last|falsy}},{{else}}
+        {{/if}}{{/actions}}{{closeBrace}};
+      }
+
       return {
-        {{actions}}  {{sdkName|q}}: {{sdkName}}{{if #|last|falsy}},
+        'getUrls': getUrls{{if actions|notempty}},{{/if}}
+        {{actions}}{{sdkName|q}}: {{sdkName}}{{if #|last|falsy}},
         {{/if}}{{/actions}}
       };
     }
