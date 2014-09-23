@@ -108,13 +108,17 @@
      * @return {ActionheroAuth}
      */
     ActionheroAuth.prototype.save = function authSave() {
-      var storage = sessionStorage;
+      var storage      = sessionStorage;
+      var clearStorage = localStorage;
       if (this.rememberMe) {
-        storage = localStorage;
+        storage      = localStorage;
+        clearStorage = sessionStorage;
       }
 
       storage[this.prefix + 'token']  = (this.token !== null)  ? this.token  : '';
       storage[this.prefix + 'userId'] = (this.userId !== null) ? this.userId : '';
+      clearStorage[this.prefix + 'token']  = '';
+      clearStorage[this.prefix + 'userId'] = '';
       return this;
     };
 
