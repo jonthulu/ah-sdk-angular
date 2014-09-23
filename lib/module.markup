@@ -21,7 +21,7 @@ module
       return {
         'request': function actionheroRequestInterceptor(config) {
           if (ActionheroAuth.token) {
-            config.headers.authorization = ActionheroAuth.token;
+            config.headers.authorization = {{if tokenPrepend}}{{tokenPrepend|q}} + {{/if}}ActionheroAuth.token;
           }
           return config;
         }

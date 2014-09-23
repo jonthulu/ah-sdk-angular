@@ -10,14 +10,16 @@ module.exports = function(grunt) {
     var options = this.options({
       moduleName:    'ahServices',
       wrap:          null,
+      tokenPrepend:  null,
       apiUrl:        null,
       output:        null,
       serviceOutput: null
     });
-    options.version    = version || options.version || null;
-    options.wrap       = wrap || options.wrap || null;
-    options.output     = output || options.output || null;
-    options.singleFile = !!((singleFile === undefined) ? options.singleFile : singleFile);
+    options.version      = version || options.version || null;
+    options.wrap         = wrap || options.wrap || null;
+    options.output       = output || options.output || null;
+    options.singleFile   = !!((singleFile === undefined) ? options.singleFile : singleFile);
+    options.tokenPrepend = options.tokenPrepend || null;
 
     if (!options.output) {
       grunt.fail.warn('Missing mandatory option "output".');

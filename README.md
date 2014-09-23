@@ -100,6 +100,12 @@ If true, each file will be wrapped in a javascript function wrapper.
 })(window, window.angular);
 ```
 
+#### tokenPrepend
+Type: `String` *Optional  
+Default: `null`
+
+A string that is prepended to your access token before it is sent for authentication.
+
 #### filter.whitelist
 Type: `Array.<string>` *Optional  
 Default: `[]`
