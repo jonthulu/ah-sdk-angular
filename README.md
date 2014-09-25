@@ -104,7 +104,9 @@ If true, each file will be wrapped in a javascript function wrapper.
 Type: `String` *Optional  
 Default: `null`
 
-A string that is prepended to your access token before it is sent for authentication.
+A string that is prepended to your access token before it is sent for authentication.  
+For example, if you are using the `passport-http-bearer` package, you will need to set
+this to 'Bearer '.
 
 #### filter.whitelist
 Type: `Array.<string>` *Optional  
