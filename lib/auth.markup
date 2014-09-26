@@ -16,10 +16,11 @@
      * @constructor
      */
     function ActionheroAuth() {
-      this.prefix     = '$Actionhero:';
-      this.token      = loadFromStorage('token', this.prefix);
-      this.userId     = loadFromStorage('userId', this.prefix);
-      this.rememberMe = true;
+      this.prefix      = '$Actionhero:';
+      this.token       = loadFromStorage('token', this.prefix);
+      this.userId      = loadFromStorage('userId', this.prefix);
+      this.tokenPrefix = {{if tokenPrepend}}{{tokenPrepend|q}}{{else}}''{{/if}};
+      this.rememberMe  = true;
     }
 
     /**
@@ -29,6 +30,15 @@
      */
     ActionheroAuth.prototype.getUserId = function getUserId() {
       return this.userId;
+    };
+
+    /**
+     * Gets the access token with its prefix.
+     *
+     * @return {string} The token with its prefix.
+     */
+    ActionheroAuth.prototype.getFullToken = function getFullToken() {
+      return this.tokenPrefix + this.token;
     };
 
     /**
