@@ -225,12 +225,12 @@ Auth.login(email, password).then(function (data) {}, function (err) {});
 ```
 
 A bonus method `getUrls` is generated for each model that returns an object with the url for each
-action. Be aware of any :params in each url that may need to be replaced. You can use `actionheroRouteHelper.parseRoute`
+action. Be aware of any :params in each url that may need to be replaced. You can use `ahRouteHelper.parseRoute`
 to fill in these params if you like.
 ```js
-angular.module('myApp').controller('userController', ['Users', 'actionheroRouteHelper', function (Users, actionheroRouteHelper) {
+angular.module('myApp').controller('userController', ['Users', 'ahRouteHelper', function (Users, ahRouteHelper) {
   var url = Users.getUrls().getPrivateData;            // Returns '/users/getPrivateData/:id'.
-  actionheroRouteHelper.parseRoute(url, {id: 32}).url; // Returns '/users/getPrivateData/32'.
+  ahRouteHelper.parseRoute(url, {id: 32}).url; // Returns '/users/getPrivateData/32'.
 }
 ```
 
@@ -317,10 +317,10 @@ angular.module('myApp', [
 
 * Simply inject your new models into anywhere you need them.
 ```js
-angular.module('myApp').controller('authController', ['Auth', 'ActionheroAuth', function (Auth, ActionheroAuth) {
+angular.module('myApp').controller('authController', ['Auth', 'ahAuth', function (Auth, ahAuth) {
   $scope.login = function () {
     Auth.login({'email': email, 'password': password}).then(function loginSuccess(user) {
-      ActionheroAuth.login(user.token, user.id, $scope.rememberMe);
+      ahAuth.login(user.token, user.id, $scope.rememberMe);
       console.log('Login Success', user);
     }, function loginError(err) {
       console.log('Login Error', err);
@@ -329,17 +329,17 @@ angular.module('myApp').controller('authController', ['Auth', 'ActionheroAuth', 
 }]);
 ```
 
-* Use the ActionheroAuth service to track Authentication. When provided an access token and user id, all subsequent
+* Use the ahAuth service to track Authentication. When provided an access token and user id, all subsequent
 $http calls will have the Authentication header automatically set to your user access token.
 ```
-angular.module('myApp').controller('testController', ['ActionheroAuth', 'Users', function (ActionheroAuth, Users) { 
+angular.module('myApp').controller('testController', ['ahAuth', 'Users', function (ahAuth, Users) {
   var someToken  = '1234';
   var someUserId = 1;
   // This would have happened in the login, not in the same controller...
-  ActionheroAuth.login(someToken, someUserId, true);
+  ahAuth.login(someToken, someUserId, true);
 
   // We better have 'id' in our inputs.required in the userGetPrivateData action.
-  Users.getPrivateData({id: ActionheroAuth.getUserId()}).then(function (myPrivateData) {
+  Users.getPrivateData({id: ahAuth.getUserId()}).then(function (myPrivateData) {
     console.log(myPrivateData);
   });
 
@@ -352,10 +352,10 @@ Note: You will have to generate your own accessTokens, I use the uid2 package av
 npm install uid2 --save
 ```
 
-* When you logout the user, call ActionheroAuth.logout() to clear the current session.
+* When you logout the user, call ahAuth.logout() to clear the current session.
 ```js
 Auth.logout(function logoutSuccess() {
-  ActionheroAuth.logout();
+  ahAuth.logout();
 });
 ```
 

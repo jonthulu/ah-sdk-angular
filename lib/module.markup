@@ -13,22 +13,22 @@ var module = angular.module({{moduleName|q}}, ['ngResource']);
 
 module
   .constant('apiUrlBase', {{url|q}})
-  .config(['$httpProvider', function actionHeroServicesConfig($httpProvider) {
-    $httpProvider.interceptors.push('ActionheroAuthInterceptor');
+  .config(['$httpProvider', function ahServicesConfig($httpProvider) {
+    $httpProvider.interceptors.push('ahAuthInterceptor');
   }])
-  .factory('ActionheroAuthInterceptor', ['ActionheroAuth',
-    function actionheroInterceptorFactory(ActionheroAuth) {
+  .factory('ahAuthInterceptor', ['ahAuth',
+    function ahInterceptorFactory(ahAuth) {
       return {
-        'request': function actionheroRequestInterceptor(config) {
-          if (ActionheroAuth.token) {
-            config.headers.authorization = {{if tokenPrepend}}{{tokenPrepend|q}} + {{/if}}ActionheroAuth.token;
+        'request': function ahRequestInterceptor(config) {
+          if (ahAuth.token) {
+            config.headers.authorization = {{if tokenPrepend}}{{tokenPrepend|q}} + {{/if}}ahAuth.token;
           }
           return config;
         }
       };
     }
   ])
-  .factory('actionheroRouteHelper', function actionheroRouteHelperFactory() {
+  .factory('ahRouteHelper', function ahRouteHelperFactory() {
     /**
      * Combines an argument values array and an argument names array into an arguments object.
      *
@@ -88,8 +88,8 @@ module
       parseRoute:  parseRoute
     }
   })
-  .factory('ActionheroHttp', [ '$http', function actionheroHttpFactory($http) {
-    return function ActionheroHttp(config) {
+  .factory('ahHttp', [ '$http', function ahHttpFactory($http) {
+    return function AHHttp(config) {
       return $http(config).then(function (response) {
         return response.data;
       });

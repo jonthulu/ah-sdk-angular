@@ -4,18 +4,18 @@
  * Authentication helper for the actionhero SDK.
  *
  * @ngdoc object
- * @name {{moduleName}}.ActionheroAuth
+ * @name {{moduleName}}.ahAuth
  * @object
  * @description Generates the authentication helper.
  */
 {{if single}}module{{else}}angular.module({{moduleName|q}}){{/if}}
-  .factory('ActionheroAuth', function actionheroAuthFactory() {
+  .factory('ahAuth', function ahAuthFactory() {
     /**
      * Authentication helper for the actionhero SDK.
      *
      * @constructor
      */
-    function ActionheroAuth() {
+    function AHAuth() {
       this.prefix      = '$Actionhero:';
       this.token       = loadFromStorage('token', this.prefix);
       this.userId      = loadFromStorage('userId', this.prefix);
@@ -28,7 +28,7 @@
      *
      * @return {int|null}
      */
-    ActionheroAuth.prototype.getUserId = function getUserId() {
+    AHAuth.prototype.getUserId = function getUserId() {
       return this.userId;
     };
 
@@ -37,7 +37,7 @@
      *
      * @return {string} The token with its prefix.
      */
-    ActionheroAuth.prototype.getFullToken = function getFullToken() {
+    AHAuth.prototype.getFullToken = function getFullToken() {
       return this.tokenPrefix + this.token;
     };
 
@@ -46,7 +46,7 @@
      *
      * @return {boolean}
      */
-    ActionheroAuth.prototype.isLoggedIn = function isLoggedIn() {
+    AHAuth.prototype.isLoggedIn = function isLoggedIn() {
       return (this.userId != null);
     };
 
@@ -57,7 +57,7 @@
      * @param {int} userId The id of the user.
      * @param {boolean} rememberMe True to remember the user across browser sessions.
      */
-    ActionheroAuth.prototype.login = function authLogin(token, userId, rememberMe) {
+    AHAuth.prototype.login = function authLogin(token, userId, rememberMe) {
       this.setUser(token, userId);
       this.setRememberMe(rememberMe);
       this.save();
@@ -67,9 +67,9 @@
     /**
      * Removes the login info for the user from the browser storage.
      *
-     * @return {ActionheroAuth}
+     * @return {AHAuth}
      */
-    ActionheroAuth.prototype.logout = function authLogout() {
+    AHAuth.prototype.logout = function authLogout() {
       this.clearData();
       this.save();
       return this;
@@ -79,9 +79,9 @@
      * Sets whether or not to remember the user across browser sessions.
      *
      * @param {boolean} rememberMe
-     * @return {ActionheroAuth}
+     * @return {AHAuth}
      */
-    ActionheroAuth.prototype.setRememberMe = function authSetRememberMe(rememberMe) {
+    AHAuth.prototype.setRememberMe = function authSetRememberMe(rememberMe) {
       this.rememberMe = !!rememberMe;
       return this;
     };
@@ -92,9 +92,9 @@
      *
      * @param {string} token The access token for the user.
      * @param {int} userId The id of the user.
-     * @return {ActionheroAuth}
+     * @return {AHAuth}
      */
-    ActionheroAuth.prototype.setUser = function authSetUser(token, userId) {
+    AHAuth.prototype.setUser = function authSetUser(token, userId) {
       this.token  = token;
       this.userId = userId;
       return this;
@@ -104,9 +104,9 @@
      * Clears the user data without saving it to the browser storage.
      * Use logout() to save these changes.
      *
-     * @return {ActionheroAuth}
+     * @return {AHAuth}
      */
-    ActionheroAuth.prototype.clearData = function authClearData() {
+    AHAuth.prototype.clearData = function authClearData() {
       this.token  = null;
       this.userId = null;
       return this;
@@ -115,9 +115,9 @@
     /**
      * Saves the currently defined data to the browser storage.
      *
-     * @return {ActionheroAuth}
+     * @return {AHAuth}
      */
-    ActionheroAuth.prototype.save = function authSave() {
+    AHAuth.prototype.save = function authSave() {
       var storage      = sessionStorage;
       var clearStorage = localStorage;
       if (this.rememberMe) {
@@ -135,9 +135,9 @@
     /**
      * Loads the user data from the browser storage into this auth helper.
      *
-     * @return {ActionheroAuth}
+     * @return {AHAuth}
      */
-    ActionheroAuth.prototype.load = function authLoad() {
+    AHAuth.prototype.load = function authLoad() {
       this.token  = loadFromStorage('token', this.prefix);
       this.userId = loadFromStorage('userId', this.prefix);
       return this;
@@ -155,6 +155,6 @@
       return localStorage[key] || sessionStorage[key] || null;
     }
 
-    return new ActionheroAuth();
+    return new AHAuth();
   });{{if single|falsy}}{{if wrap}}
 })(window, window.angular);{{/if}}{{/if}}
