@@ -86,7 +86,7 @@ module
     return {
       combineArgs: combineArgs,
       parseRoute:  parseRoute
-    }
+    };
   })
   .factory('ahHttp', [ '$http', function ahHttpFactory($http) {
     return function AHHttp(config) {
