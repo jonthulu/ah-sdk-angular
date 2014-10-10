@@ -34,9 +34,12 @@
         {{/if}}var parsed = ahRouteHelper.parseRoute({{route|q}}, args || {});
 
         return ahHttp({
-          method: {{verb|q}},
-          url:    apiUrlBase + parsed.url,
-          {{if verb|equals>get}}params: parsed.args || null{{else}}data:   parsed.args || null{{/if}}
+          method:  {{verb|q}},
+          url:     apiUrlBase + parsed.url,
+          {{if verb|equals>get}}params:  parsed.args || null,{{else}}data:    parsed.args || null,{{/if}}
+          headers: {
+            'Content-Type': 'application/json'
+          }
         });
       }{{if #|last|falsy}}
 
