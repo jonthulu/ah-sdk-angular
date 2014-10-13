@@ -379,8 +379,13 @@ Users.getPrivateData({
 }).then(...);
 ```
 
-* To override the angular $http config defaults for all SDK calls, use angular.module(...).run().
+* To override the angular $http config defaults for all SDK calls, use angular.module(...).run() or .config().
 ```js
+angular.module('myApp').config(['$httpProvider', function ($httpProvider) {
+  $httpProvider.defaults.xsrfCookieName  = 'ahXSRF';
+  $httpProvider.defaults.withCredentials = true;
+}]);
+/* OR */
 angular.module('myApp').run(['$http', function ($http) {
   $http.defaults.xsrfCookieName  = 'ahXSRF';
   $http.defaults.withCredentials = true;

@@ -15,9 +15,7 @@ module
   .constant('apiUrlBase', {{url|q}})
   .config(['$httpProvider', function ahServicesConfig($httpProvider) {
     $httpProvider.interceptors.push('ahAuthInterceptor');
-  }])
-  .run(['$http', function ahServicesRun($http) {
-    $http.defaults.headers.common['Content-Type'] = 'application/json';
+    $httpProvider.defaults.headers.common['Content-Type'] = 'application/json';
   }])
   .factory('ahAuthInterceptor', ['ahAuth',
     function ahInterceptorFactory(ahAuth) {
