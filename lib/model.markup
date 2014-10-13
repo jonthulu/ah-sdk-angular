@@ -1,5 +1,8 @@
 {{if single|falsy}}{{if wrap}}(function(window, angular, undefined) {{{/if}}'use strict';
-
+{{if wrap|nor>sdkSingleParam}}
+{{if wrap|falsy}}/* jshint -W097 */{{/if}}
+{{if sdkSingleParam|falsy}}/* jshint -W098 */{{/if}}
+{{/if}}
 {{/if}}/**
  * Generates the `{{name|lowercapcase}}` object for the Actionhero SDK.
  *
