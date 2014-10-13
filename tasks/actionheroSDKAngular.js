@@ -11,6 +11,7 @@ module.exports = function(grunt) {
       moduleName:    'ahServices',
       wrap:          null,
       tokenPrepend:  null,
+      modelPrepend:  null,
       apiUrl:        null,
       output:        null,
       serviceOutput: null

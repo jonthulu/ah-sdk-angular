@@ -100,6 +100,15 @@ If true, each file will be wrapped in a javascript function wrapper.
 })(window, window.angular);
 ```
 
+### modelPrepend
+Type: `String` *Optional  
+Default: `null`
+
+A string that is prepended to each angular model name. If this option is set, the actual model
+will be upperCamelCased instead of lowerCamelCased, though the overall name will still be lowerCamelCased.
+For example: If set to 'sv', an 'auth' model will become 'svAuth' instead of 'auth'.
+This option cannot be set to 'ah' as this would cause conflicts with the other SDK services.
+
 #### tokenPrepend
 Type: `String` *Optional  
 Default: `null`
