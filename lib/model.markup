@@ -19,14 +19,19 @@
        *{{if sdkSingleParam|falsy}}{{inputs.required}}
        * @param {string|number} {{.}} Required.{{/inputs.required}}{{inputs.optional}}
        * @param {string|number=} {{.}} Optional.{{/inputs.optional}}{{else}}
-       * @param {{doubleOpenBrace}}{{inputs.required}}{{.}}:*,{{/inputs.required}}{{inputs.optional}}{{.}}:*,{{/inputs.optional}}{{doubleCloseBrace}} args{{/if}}
+       * @param {{doubleOpenBrace}}{{inputs.required}}{{.}}:*,{{/inputs.required}}{{inputs.optional}}{{.}}:*,{{/inputs.optional}}{{doubleCloseBrace}} args
+       * @param {{openBrace}}object={{closeBrace}} config Optional $http config object.{{/if}}
        * @return {HttpPromise} A promise object with the standard then method.
        *                       Use promise.data for the response body.
        */
-      function {{sdkName}}({{if sdkSingleParam}}args{{else}}{{params}}{{.}}{{if #|last|falsy}}, {{/if}}{{/params}}{{/if}}) {
+      function {{sdkName}}({{if sdkSingleParam}}args, config{{else}}{{params}}{{.}}{{if #|last|falsy}}, {{/if}}{{/params}}{{/if}}) {
         {{if sdkSingleParam|falsy}}var args;
+        var config = null;
         if (arguments[0] && typeof arguments[0] === 'object') {
           args = arguments[0];
+          if (arguments[1] && typeof arguments[1] === 'object') {
+            config = arguments[1];
+          }
         } else {
           args = ahRouteHelper.combineArgs(arguments, [{{if params}}
             {{params}}{{.|q}}{{if #|last|falsy}},
@@ -39,11 +44,8 @@
         return ahHttp({
           method:  {{verb|q}},
           url:     apiUrlBase + parsed.url,
-          {{if verb|equals>get}}params:  parsed.args || null,{{else}}data:    parsed.args || null,{{/if}}
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        });
+          {{if verb|equals>get}}params:  parsed.args || null{{else}}data:    parsed.args || null{{/if}}
+        }, config);
       }{{if #|last|falsy}}
 
       {{/if}}{{/actions}}

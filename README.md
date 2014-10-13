@@ -368,4 +368,23 @@ Auth.logout(function logoutSuccess() {
 });
 ```
 
+* To override the angular $http config options when calling the SDK, send the first argument as
+an object of parameters and the second argument as an object of config options. Note that any
+options that are explicitly set by the SDK call (method, url, etc) cannot be overridden.
+```js
+Users.getPrivateData({
+  id: 1
+}, {
+  cache: true
+}).then(...);
+```
+
+* To override the angular $http config defaults for all SDK calls, use angular.module(...).run().
+```js
+angular.module('myApp').run(['$http', function ($http) {
+  $http.defaults.xsrfCookieName  = 'ahXSRF';
+  $http.defaults.withCredentials = true;
+}]);
+```
+
 * Check the docblocks in the generated code for more help if you need it.

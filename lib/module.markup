@@ -16,6 +16,9 @@ module
   .config(['$httpProvider', function ahServicesConfig($httpProvider) {
     $httpProvider.interceptors.push('ahAuthInterceptor');
   }])
+  .run(['$http', function ahServicesRun($http) {
+    $http.defaults.headers.common['Content-Type'] = 'application/json';
+  }])
   .factory('ahAuthInterceptor', ['ahAuth',
     function ahInterceptorFactory(ahAuth) {
       return {
@@ -89,8 +92,17 @@ module
     };
   })
   .factory('ahHttp', [ '$http', function ahHttpFactory($http) {
-    return function AHHttp(config) {
-      return $http(config).then(function (response) {
+    return function AHHttp(mainConfig, altConfig) {
+      if (!altConfig || typeof altConfig !== 'object') {
+        altConfig = {};
+      }
+      for (var i in mainConfig) {
+        if (mainConfig.hasOwnProperty(i)) {
+          altConfig[i] = mainConfig[i];
+        }
+      }
+
+      return $http(altConfig).then(function (response) {
         return response.data;
       });
     };
