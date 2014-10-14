@@ -309,6 +309,12 @@ Default: `false`
 If true, the `inputs.required` and `inputs.optional` params will not be listed out as arguments of the method.
 Instead, only a single param will be available that accepts the key/value object of params.
 
+### sdkClearCacheMethod
+Type: `boolean` *Optional  
+Default: `true` for get methods, `false` otherwise.
+
+Generates a clear cache method for this action if true.
+
 ## Using the generated services
 
 * Add the ahServices.js file (and any other generated files) to your Angular App.
