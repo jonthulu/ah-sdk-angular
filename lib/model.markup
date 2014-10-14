@@ -79,6 +79,11 @@
        * @return {object}
        */
       function getCache() {
+        var defaultCache = $http.defaults.cache;
+        if (defaultCache && typeof defaultCache === 'object') {
+          return defaultCache;
+        }
+
         return $cacheFactory.get('$http');
       }
 
