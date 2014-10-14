@@ -12,8 +12,8 @@
  * @description An $http object for the `{{name}}` model.
  */
 {{if single}}module{{else}}angular.module({{moduleName|q}}){{/if}}
-  .factory({{name|lowercapcase|q}}, ['ahHttp', 'apiUrlBase', 'ahRouteHelper', '$cacheFactory',
-    function (ahHttp, apiUrlBase, ahRouteHelper, $cacheFactory) {
+  .factory({{name|lowercapcase|q}}, ['ahHttp', 'apiUrlBase', 'ahRouteHelper', '$cacheFactory', '$http',
+    function (ahHttp, apiUrlBase, ahRouteHelper, $cacheFactory, $http) {
       {{actions}}/**
        * {{description}}
        *{{if sdkSingleParam|falsy}}{{inputs.required}}
