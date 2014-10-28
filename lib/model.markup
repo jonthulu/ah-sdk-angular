@@ -54,7 +54,7 @@
        * @param {string|number} {{.}} Required.{{/pathParams}}{{/if}}
        * @param {object=} cache
        */
-      function clearCache{{sdkName|capcase}}({{if pathParams}}{{pathParams}}{{.}}{{/pathParams}}, {{/if}}cache) {{openBrace}}
+      function clearCache{{sdkName|capcase}}({{if pathParams}}{{pathParams}}{{.}}, {{/pathParams}}{{/if}}cache) {{openBrace}}
         {{if pathParams}}var args;
         if (arguments[0] && typeof arguments[0] === 'object') {
           args = arguments[0];

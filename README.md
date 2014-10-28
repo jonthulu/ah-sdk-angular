@@ -267,7 +267,7 @@ The name to use when generating a method for this route.
 // Generates an Auth.login method.
 ```
 
-#### sdkPath
+#### sdkRoute
 Type: `string` *Optional  
 Default: `null`
 
