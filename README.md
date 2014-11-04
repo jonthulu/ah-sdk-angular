@@ -161,6 +161,36 @@ Default: `'ahServices'`
 
 The name of the generated angular module.
 
+### skipHttpGen
+Type: `Boolean` *Optional  
+Default: false
+
+If true, the `ahHttp` factory service will not be generated but still be used. This allows (and requires)
+the user to write their own angular $http factory wrapper to suit their needs. This factory must return a
+function that takes two config arguments and returns the results in whatever format you choose. The
+first config argument is the generated $http config options, the second config argument are the
+optional $http config options given by the user from the angular app.
+
+```js
+// Example of a custom ahHttp factory (same as the generated one).
+angular.module('myApp').factory('ahHttp', [ '$http', function ahHttpFactory($http) {
+    return function AHHttp(mainConfig, altConfig) {
+      if (!altConfig || typeof altConfig !== 'object') {
+        altConfig = {};
+      }
+      for (var i in mainConfig) {
+        if (mainConfig.hasOwnProperty(i)) {
+          altConfig[i] = mainConfig[i];
+        }
+      }
+
+      return $http(altConfig).then(function (response) {
+        return response.data;
+      });
+    };
+  }]);
+```
+
 ### Sending options to Grunt
 Options format when calling grunt is `:output:version:singleFile:wrap`.
 ```shell

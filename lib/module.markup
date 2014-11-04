@@ -88,7 +88,7 @@ module
       combineArgs: combineArgs,
       parseRoute:  parseRoute
     };
-  })
+  }){{if skipHttpGen}};{{else}}
   .factory('ahHttp', [ '$http', function ahHttpFactory($http) {
     return function AHHttp(mainConfig, altConfig) {
       if (!altConfig || typeof altConfig !== 'object') {
@@ -104,7 +104,7 @@ module
         return response.data;
       });
     };
-  }]);
+  }]);{{/if}}
 {{if single}}
 {{files}}{{output}}{{if #|last|falsy}}
 {{/if}}{{/files}}
