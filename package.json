@@ -1,7 +1,8 @@
 {
   "name": "ah-sdk-angular",
   "description": "Tool for auto-generating Angular $resource services for Actionhero",
-  "version": "0.0.7",
+  "version": "0.0.8",
+  "homepage": "https://github.com/jonthulu/ah-sdk-angular",
   "main": "./lib/generator",
   "engines": {
     "node": ">=0.10.0"
@@ -9,5 +10,9 @@
   "dependencies": {
     "lodash": "2.4.x",
     "markup-js": "1.5.x"
+  },
+  "repository" : {
+    "type" : "git",
+    "url"  : "https://github.com/jonthulu/ah-sdk-angular.git"
   }
 }
