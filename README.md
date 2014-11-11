@@ -100,7 +100,7 @@ If true, each file will be wrapped in a javascript function wrapper.
 })(window, window.angular);
 ```
 
-### modelPrepend
+#### modelPrepend
 Type: `String` *Optional  
 Default: `null`
 
@@ -161,7 +161,7 @@ Default: `'ahServices'`
 
 The name of the generated angular module.
 
-### skipHttpGen
+#### skipHttpGen
 Type: `Boolean` *Optional  
 Default: false
 
@@ -339,7 +339,7 @@ Default: `false`
 If true, the `inputs.required` and `inputs.optional` params will not be listed out as arguments of the method.
 Instead, only a single param will be available that accepts the key/value object of params.
 
-### sdkClearCacheMethod
+#### sdkClearCacheMethod
 Type: `boolean` *Optional  
 Default: `true` for get methods, `false` otherwise.
 
