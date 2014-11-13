@@ -21,7 +21,7 @@
        * @param {string|number=} {{.}} Optional.{{/inputs.optional}}{{else}}
        * @param {{doubleOpenBrace}}{{inputs.required}}{{.}}:*,{{/inputs.required}}{{inputs.optional}}{{.}}:*,{{/inputs.optional}}{{doubleCloseBrace}} args
        * @param {{openBrace}}object={{closeBrace}} config Optional $http config object.{{/if}}
-       * @return {HttpPromise} A promise object with the standard then method.
+       * @return {promise} A promise object with the standard then method.
        *                       Use promise.data for the response body.
        */
       function {{sdkName}}({{if sdkSingleParam}}args, config{{else}}{{params}}{{.}}{{if #|last|falsy}}, {{/if}}{{/params}}{{/if}}) {
