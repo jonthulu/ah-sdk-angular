@@ -17,14 +17,20 @@ module
     $httpProvider.interceptors.push('ahAuthInterceptor');
     $httpProvider.defaults.headers.common['Content-Type'] = 'application/json';
   }])
-  .factory('ahAuthInterceptor', ['ahAuth',
-    function ahInterceptorFactory(ahAuth) {
+  .factory('ahAuthInterceptor', ['ahAuth', '$q', '$rootScope',
+    function ahInterceptorFactory(ahAuth, $q, $rootScope) {
       return {
         'request': function ahRequestInterceptor(config) {
           if (ahAuth.token) {
-            config.headers.authorization = {{if tokenPrepend}}{{tokenPrepend|q}} + {{/if}}ahAuth.token;
+            config.headers.authorization = 'Bearer ' + ahAuth.token;
           }
           return config;
+        },
+        'responseError': function ahResponseErrorInterceptor(rejection) {
+          if (rejection.status === 401) {
+            $rootScope.$broadcast('ahAuth:Failed');
+          }
+          return $q.reject(rejection);
         }
       };
     }

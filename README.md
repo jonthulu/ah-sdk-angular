@@ -383,7 +383,7 @@ angular.module('myApp').controller('testController', ['ahAuth', 'Users', functio
   // This would have happened in the login, not in the same controller...
   ahAuth.login(someToken, someUserId, true);
 
-  // We better have 'id' in our inputs.required in the userGetPrivateData action.
+  // We will need 'id' in our inputs.required in the userGetPrivateData action.
   Users.getPrivateData({id: ahAuth.getUserId()}).then(function (myPrivateData) {
     console.log(myPrivateData);
   });
@@ -402,6 +402,17 @@ npm install uid2 --save
 Auth.logout(function logoutSuccess() {
   ahAuth.logout();
 });
+```
+
+* When a 401 Unauthorized status is send in a response, the 'ahAuth:Failed' event is broadcast to the $rootScope.
+It is up to you to handle that event. Here is an example of how to handle it:
+```js
+angular.module('myApp').run(function unauthorizedHandler($rootScope, $location, ahAuth) {
+    $rootScope.$on('ahAuth:Failed', function () {
+      ahAuth.logout();
+      $location.path('/login');
+    });
+  })
 ```
 
 * To override the angular $http config options when calling the SDK, send the first argument as
