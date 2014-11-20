@@ -49,26 +49,35 @@
       }{{if sdkClearCacheMethod}}
 
       /**
-       * Clears the cache for the `{{sdkName}}` call.{{if pathParams}}
-       *{{pathParams}}
-       * @param {string|number} {{.}} Required.{{/pathParams}}{{/if}}
-       * @param {object=} cache
+       * Clears the cache for the `{{sdkName}}` call.
+       * {{if sdkSingleParam|falsy}}{{inputs.required}}
+       * @param {string|number} {{.}} Required.{{/inputs.required}}{{inputs.optional}}
+       * @param {string|number=} {{.}} Optional.{{/inputs.optional}}{{else}}
+       * @param {{doubleOpenBrace}}{{inputs.required}}{{.}}:*,{{/inputs.required}}{{inputs.optional}}{{.}}:*,{{/inputs.optional}}{{doubleCloseBrace}} args
+       * @param {{openBrace}}object={{closeBrace}} cache Optional cache object.{{/if}}
        */
-      function clearCache{{sdkName|capcase}}({{if pathParams}}{{pathParams}}{{.}}, {{/pathParams}}{{/if}}cache) {{openBrace}}
-        {{if pathParams}}var args;
+      function clearCache{{sdkName|capcase}}({{if sdkSingleParam}}args, cache{{else}}{{params}}{{.}}{{if #|last|falsy}}, {{/if}}{{/params}}{{/if}}) {{openBrace}}
+        {{if sdkSingleParam|falsy}}var args;
+        var cache = null;
         if (arguments[0] && typeof arguments[0] === 'object') {
           args = arguments[0];
+          if (arguments[1] && typeof arguments[1] === 'object') {
+            cache = arguments[1];
+          }
         } else {
-          args = ahRouteHelper.combineArgs(arguments, [{{if pathParams}}
-            {{pathParams}}{{.|q}}{{if #|last|falsy}},
-            {{/if}}{{/pathParams}}
+          args = ahRouteHelper.combineArgs(arguments, [{{if params}}
+            {{params}}{{.|q}}{{if #|last|falsy}},
+            {{/if}}{{/params}}
           {{/if}}]);
         }
-        var parsed = ahRouteHelper.parseRoute({{route|q}}, args || {});
-        {{else}}var parsed = {url: {{route|q}}};{{/if}}
+
+        {{/if}}var parsed = ahRouteHelper.parseRoute({{route|q}}, args || {});
+
         cache = cache || getCache();
         if (cache) {
-          cache.remove(apiUrlBase + parsed.url);
+          cache.remove(
+            ahRouteHelper.buildCacheUrl(apiUrlBase + parsed.url, parsed.args || null)
+          );
         }
       {{closeBrace}}{{/if}}{{if #|last|falsy}}
 

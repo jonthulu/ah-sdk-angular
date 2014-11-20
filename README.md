@@ -4,6 +4,16 @@
 
 The services are generated based entirely on the actionhero routing. (See Generation Details below)
 
+## Latest Changes
+
+### From version 0.0.12 to 0.1.0
+The generated clear cache methods have been updated in a manner that is not backwards compatible
+if you were sending in a cache object. The cache object now must be sent as the second argument with
+any GET parameters sent in an object as the first argument (this matches how other generated get methods
+worked already). Any clearCache* methods that were being called without arguments will not need to be
+updated and will not break. Any such methods that were sent non-cache object arguments may need to be
+updated.
+
 ## Getting Started
 The included grunt task requires Grunt `~0.4.2`
 

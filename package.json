@@ -1,7 +1,7 @@
 {
   "name": "ah-sdk-angular",
   "description": "Tool for auto-generating Angular $http services for Actionhero",
-  "version": "0.0.12",
+  "version": "0.1.0",
   "homepage": "https://github.com/jonthulu/ah-sdk-angular",
   "main": "./lib/generator",
   "engines": {

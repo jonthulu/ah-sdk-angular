@@ -90,9 +90,69 @@ module
         args: remainingArgs
       };
     }
+
+    /**
+     * Builds the url used by $http caching.
+     *
+     * @param {string} url
+     * @param {Object} params
+     * @return {string}
+     */
+    function buildCacheUrl(url, params) {
+      if (!params) {
+        return url;
+      }
+      var parts = [];
+      var i, v;
+      forEachSorted(params, function (value, key) {
+        if (value === null || typeof value === 'undefined') {
+          return;
+        }
+        if (Object.prototype.toString.call(value) !== '[object Array]') {
+          value = [value];
+        }
+
+        for (i = 0; i < value.length; i++) {
+          v = value[i];
+          if (v !== null && typeof v === 'object') {
+            v = JSON.stringify(v);
+          }
+          parts.push(encodeUriQuery(key) + '=' + encodeUriQuery(v));
+        }
+      });
+      if (parts.length > 0) {
+        url += ((url.indexOf('?') == -1) ? '?' : '&') + parts.join('&');
+      }
+      return url;
+    }
+
+    function forEachSorted(obj, iterator, context) {
+      var keys = [];
+      for (var key in obj) {
+        if (obj.hasOwnProperty(key)) {
+          keys.push(key);
+        }
+      }
+      keys = keys.sort();
+      for (var i = 0; i < keys.length; i++) {
+        iterator.call(context, obj[keys[i]], keys[i]);
+      }
+      return keys;
+    }
+
+    function encodeUriQuery(val) {
+      return encodeURIComponent(val).
+        replace(/%40/gi, '@').
+        replace(/%3A/gi, ':').
+        replace(/%24/g, '$').
+        replace(/%2C/gi, ',').
+        replace(/%20/g, '+');
+    }
+
     return {
-      combineArgs: combineArgs,
-      parseRoute:  parseRoute
+      combineArgs:   combineArgs,
+      parseRoute:    parseRoute,
+      buildCacheUrl: buildCacheUrl
     };
   }){{if skipHttpGen}};{{else}}
   .factory('ahHttp', [ '$http', function ahHttpFactory($http) {
