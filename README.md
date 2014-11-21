@@ -14,6 +14,10 @@ worked already). Any clearCache* methods that were being called without argument
 updated and will not break. Any such methods that were sent non-cache object arguments may need to be
 updated.
 
+### From version 0.1.0 to 0.1.1
+Added `skipGenUrl` and `addModuleDependency` options. If you want to use `grunt-ng-constant` to generate
+your api url for dev vs production, this is how you'll do it.
+
 ## Getting Started
 The included grunt task requires Grunt `~0.4.2`
 
@@ -200,6 +204,20 @@ angular.module('myApp').factory('ahHttp', [ '$http', function ahHttpFactory($htt
     };
   }]);
 ```
+
+#### skipUrlGen
+Type: `Boolean` *Optional  
+Default: false
+
+If true, the `apiUrlBase` constant will not be generated but still used. This allows (and requires)
+the user to define their own `apiUrlBase` constant elsewhere in the code.
+
+#### addModuleDependency
+Type: `Array.<String>` *Optional  
+Default: null
+
+Adds module names as dependencies of the generated module. This can be used when `skipHttpGen` and/or
+`skipUrlGen` are used.
 
 ### Sending options to Grunt
 Options format when calling grunt is `:output:version:singleFile:wrap`.
@@ -448,5 +466,10 @@ angular.module('myApp').run(['$http', function ($http) {
   $http.defaults.withCredentials = true;
 }]);
 ```
+
+* To update the api url for production vs development you can use `grunt-ng-constant` to have grunt
+generate an `apiUrlBase` constant in a new `ahServiceConstants` app. Make sure to set `skipUrlGen`
+to `true` and `addModuleDependency` to `['ahServiceConstants']` (or whatever you named your constants
+module) in your gruntfile.
 
 * Check the docblocks in the generated code for more help if you need it.

@@ -9,11 +9,11 @@
  * The `{{moduleName}}` module provides services for interacting with
  * the actions exposed by the Actionhero server via the web API.
  */
-var module = angular.module({{moduleName|q}}, ['ngResource']);
+var module = angular.module({{moduleName|q}}, ['ngResource'{{if addModuleDep.length}}{{addModuleDep}}, {{.|q}}{{/addModuleDep}}{{/if}}]);
 
 module
-  .constant('apiUrlBase', {{url|q}})
-  .config(['$httpProvider', function ahServicesConfig($httpProvider) {
+  {{if skipUrlGen|falsy}}.constant('apiUrlBase', {{url|q}})
+  {{/if}}.config(['$httpProvider', function ahServicesConfig($httpProvider) {
     $httpProvider.interceptors.push('ahAuthInterceptor');
     $httpProvider.defaults.headers.common['Content-Type'] = 'application/json';
   }])
