@@ -1,11 +1,10 @@
 'use strict';
 
-var path = require('path');
 var sdkGenerator = require('../lib/generator');
 
 module.exports = function(grunt) {
   var description = 'Grunt plugin for auto-generating Angular $resource services for Actionhero';
-  grunt.registerTask('actionheroSDKAngular', description, function (output, version, singleFile, wrap) {
+  grunt.registerMultiTask('actionheroSDKAngular', description, function () {
     // Merge task-specific and/or target-specific options with these defaults.
     var options = this.options({
       moduleName:    'ahServices',
@@ -16,11 +15,6 @@ module.exports = function(grunt) {
       output:        null,
       serviceOutput: null
     });
-    options.version      = version || options.version || null;
-    options.wrap         = wrap || options.wrap || null;
-    options.output       = output || options.output || null;
-    options.singleFile   = !!((singleFile === undefined) ? options.singleFile : singleFile);
-    options.tokenPrepend = options.tokenPrepend || null;
 
     if (!options.output) {
       grunt.fail.warn('Missing mandatory option "output".');

@@ -6,6 +6,14 @@ The services are generated based entirely on the actionhero routing. (See Genera
 
 ## Latest Changes
 
+### From version 0.1.1 to 0.1.2
+Changed the grunt task to a multi task, allowing you to specify targets with unique options.
+See the `Install` section. You will no longer be able to send options directly to the grunt task.
+
+### From version 0.1.0 to 0.1.1
+Added `skipGenUrl` and `addModuleDependency` options. If you want to use `grunt-ng-constant` to generate
+your api url for dev vs production, this is how you'll do it. See the `Using the generated services` section.
+
 ### From version 0.0.12 to 0.1.0
 The generated clear cache methods have been updated in a manner that is not backwards compatible
 if you were sending in a cache object. The cache object now must be sent as the second argument with
@@ -13,10 +21,6 @@ any GET parameters sent in an object as the first argument (this matches how oth
 worked already). Any clearCache* methods that were being called without arguments will not need to be
 updated and will not break. Any such methods that were sent non-cache object arguments may need to be
 updated.
-
-### From version 0.1.0 to 0.1.1
-Added `skipGenUrl` and `addModuleDependency` options. If you want to use `grunt-ng-constant` to generate
-your api url for dev vs production, this is how you'll do it.
 
 ## Getting Started
 The included grunt task requires Grunt `~0.4.2`
@@ -54,17 +58,33 @@ this plugin with this command:
 npm install ah-sdk-angular --save-dev
 ```
 
-Once the plugin has been installed, it may be enabled inside your Gruntfile
+Once the plugin has been installed, it can be enabled inside your Gruntfile
 with these lines of JavaScript:
 
 ```js
 grunt.loadNpmTasks('ah-sdk-angular');
-grunt.config('actionheroSDKAngular', {
-  options: {
-    output: 'DIRECTORY TO OUTPUT FILES'
-    // Add extra options here.
+grunt.initConfig({
+  actionheroSDKAngular: {
+    client: {
+      options: {
+        output: 'directory/to/output/files/',
+        // Add extra options here.
+      }
+    },
+    // Example admin target.
+    admin:  {
+      options: {
+        output: 'directory/to/output/files/',
+        filter: {
+          whitelist: ['admin']
+        }
+        // Add extra options here.
+      }
+    }
   }
 });
+grunt.registerTask('angularSDK', ['actionheroSDKAngular:client']);
+grunt.registerTask('adminSDK', ['actionheroSDKAngular:admin']);
 ```
 
 ## Tasks and configuration
@@ -218,13 +238,6 @@ Default: null
 
 Adds module names as dependencies of the generated module. This can be used when `skipHttpGen` and/or
 `skipUrlGen` are used.
-
-### Sending options to Grunt
-Options format when calling grunt is `:output:version:singleFile:wrap`.
-```shell
-grunt actionheroSDKAngular:/tmp:1.0:true:true
-```
-Note: These will override the options defined in the grunt config.
 
 ## Generation Details
 
@@ -436,11 +449,11 @@ Auth.logout(function logoutSuccess() {
 It is up to you to handle that event. Here is an example of how to handle it:
 ```js
 angular.module('myApp').run(function unauthorizedHandler($rootScope, $location, ahAuth) {
-    $rootScope.$on('ahAuth:Failed', function () {
-      ahAuth.logout();
-      $location.path('/login');
-    });
-  })
+  $rootScope.$on('ahAuth:Failed', function () {
+    ahAuth.logout();
+    $location.path('/login');
+  });
+})
 ```
 
 * To override the angular $http config options when calling the SDK, send the first argument as
@@ -471,5 +484,20 @@ angular.module('myApp').run(['$http', function ($http) {
 generate an `apiUrlBase` constant in a new `ahServiceConstants` app. Make sure to set `skipUrlGen`
 to `true` and `addModuleDependency` to `['ahServiceConstants']` (or whatever you named your constants
 module) in your gruntfile.
+```js
+// Example grunt initConfig.
+grunt.initConfig({
+  actionheroSDKAngular: {
+    client: {
+      options: {
+        output:              'directory/to/output/files/',
+        skipUrlGen:          true,
+        addModuleDependency: ['ahServiceConstants']
+        // Add extra options here.
+      }
+    }
+  }
+}
+```
 
 * Check the docblocks in the generated code for more help if you need it.
