@@ -6,13 +6,13 @@ The services are generated based entirely on the actionhero routing. (See Genera
 
 ## Latest Changes
 
+### From version 0.1.2 to 0.1.3
+Added the `storagePrefix` option. Changed the `ahAuth` service from a factory to a provider to allow
+code manipulation of the `storagePrefix` and `tokenPrefix` options.
+
 ### From version 0.1.1 to 0.1.2
 Changed the grunt task to a multi task, allowing you to specify targets with unique options.
 See the `Install` section. You will no longer be able to send options directly to the grunt task.
-
-### From version 0.1.0 to 0.1.1
-Added `skipGenUrl` and `addModuleDependency` options. If you want to use `grunt-ng-constant` to generate
-your api url for dev vs production, this is how you'll do it. See the `Using the generated services` section.
 
 ### From version 0.0.12 to 0.1.0
 The generated clear cache methods have been updated in a manner that is not backwards compatible
@@ -150,6 +150,14 @@ Default: `null`
 A string that is prepended to your access token before it is sent for authentication.  
 For example, if you are using the `passport-http-bearer` package, you will need to set
 this to 'Bearer '.
+
+#### storagePrefix
+Type: `String` *Optional  
+Default: `null`
+
+A string that is prepended to the local/session storage when storing the access token.
+This can be used if you are generating an admin section of your site (for example) that needs
+different login credentials.
 
 #### filter.whitelist
 Type: `Array.<string>` *Optional  
